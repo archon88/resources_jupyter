@@ -19,6 +19,6 @@ This document summarises the disaster recovery procedure for Jupyter notebooks. 
     will recover all cells beginning with a ```def``` statement executed after the given  date. A GUI SQLite frontend tool such as [DB Browser for SQLite](https://sqlitebrowser.org/) is ideal for exploring the tables and manually extracting the  desired code; if not present it may be installed via the package ```sqlitebrowser```  (should work for any package manager). With the ```jupytext``` tool, an  appropriately formatted Python script can be automatically converted to a Jupyter  notebook file, per the Medium article linked above:
 
     ```{bash}
-    sqlite3 history.sqlite "select '# @@ Cell '|| line || char(10) || source || char (10)    from history where session = SESSION;" > myoutput.py
+    sqlite3 history.sqlite "select '# @@ Cell '|| line || char(10) || source || char(10) from history where session = SESSION;" > myoutput.py
     jupytext — to ipynb myoutput.py
 ```
