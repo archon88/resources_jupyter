@@ -20,7 +20,7 @@ This document summarises the disaster recovery procedure for Jupyter notebooks. 
 
     ```{bash}
     sqlite3 history.sqlite "SELECT '# @@ Cell '|| line || CHAR(10) || source || CHAR(10) FROM history WHERE session = SESSION_ID;" > myoutput.py
-    jupytext — to ipynb myoutput.py
+    jupytext --to ipynb myoutput.py
     ```
 
     once the session ID is known.
