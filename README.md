@@ -7,18 +7,18 @@ This document summarises the disaster recovery procedure for Jupyter notebooks. 
 3. The recovery method of last resort, then, is to find the IPython kernel's database file. This is an SQLite database that contains a record of every instruction issued to the kernel associated with the relevant Jupyter profile. Thus, recovery of all (executed) code cells is possible in principle; note that non-code cells (*e.g.* Markdown), and cell outputs, may not be so recovered.
 4. For safety, it is recommended to make a copy of the file ```.ipython/profile_default/history.sqlite``` (substituting profile name if necessary). This database may then be interrogated to recover the desired data by looking up the session ID in the ```session``` table and performing a join on the ```history``` table. For example,
 
-```{sql}
-SELECT
-	s.session, h.line, h.source
-FROM sessions AS s
-INNER JOIN history AS h ON s.session = h.session
-WHERE s.start > '2020-05-10'
-AND h.source LIKE 'def%';
-```
-
-will recover all cells beginning with a ```def``` statement executed after the given date. A GUI SQLite frontend tool such as [DB Browser for SQLite](https://sqlitebrowser.org/) is ideal for exploring the tables and manually extracting the desired code; if not present it may be installed via the package ```sqlitebrowser``` (should work for any package manager). With the ```jupytext``` tool, an appropriately formatted Python script can be automatically converted to a Jupyter notebook file, per the Medium article linked above:
-
-```{bash}
-sqlite3 history.sqlite "select '# @@ Cell '|| line || char(10) || source || char(10)    from history where session = SESSION;" > myoutput.py
-jupytext — to ipynb myoutput.py
+ ```{sql}
+ SELECT
+ 	s.session, h.line, h.source
+ FROM sessions AS s
+ INNER JOIN history AS h ON s.session = h.session
+ WHERE s.start > '2020-05-10'
+ AND h.source LIKE 'def%';
+ ```
+ 
+ will recover all cells beginning with a ```def``` statement executed after the given  date. A GUI SQLite frontend tool such as [DB Browser for SQLite](https:// sqlitebrowser.org/) is ideal for exploring the tables and manually extracting the  desired code; if not present it may be installed via the package ```sqlitebrowser```  (should work for any package manager). With the ```jupytext``` tool, an  appropriately formatted Python script can be automatically converted to a Jupyter  notebook file, per the Medium article linked above:
+ 
+ ```{bash}
+ sqlite3 history.sqlite "select '# @@ Cell '|| line || char(10) || source || char (10)    from history where session = SESSION;" > myoutput.py
+ jupytext — to ipynb myoutput.py
 ```
